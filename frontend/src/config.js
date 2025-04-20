@@ -1,2 +1,2 @@
-// export const API_URL = "http://159.65.144.70:5000/api"
-export const API_URL = "http://localhost:5001/api"
+export const API_URL = "https://hr-management-system-5q0l.onrender.com/api"
+// export const API_URL = "http://localhost:5001/api"
