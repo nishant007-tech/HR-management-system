@@ -10,7 +10,8 @@ import {
   FormControlLabel,
   Checkbox,
   IconButton,
-  Box
+  Box,
+  CircularProgress
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
@@ -30,6 +31,7 @@ export default function AddCandidateModal({ open, onClose, onSave, token}) {
     resume: null,
     agreed: false
   });
+  const [submitting, setSubmitting] = useState(false);
 
   const handleChange = e => {
     const { name, value, type, checked, files } = e.target;
@@ -51,7 +53,7 @@ export default function AddCandidateModal({ open, onClose, onSave, token}) {
       NotificationManager.error('Please fill all fields and upload resume', 'Validation');
       return;
     }
-
+    setSubmitting(true);
     const data = new FormData();
     data.append('name', name);
     data.append('email', email);
@@ -73,8 +75,9 @@ export default function AddCandidateModal({ open, onClose, onSave, token}) {
       setForm({ name:'',email:'',phone:'',position:'',experience:'',resume:null,agreed:false });
     } catch (err) {
         console.log("err",err);
-        
       NotificationManager.error(err.response?.data?.message || 'Add candidate failed', 'Error');
+    }finally{
+      setSubmitting(false);
     }
   };
 
@@ -154,17 +157,10 @@ export default function AddCandidateModal({ open, onClose, onSave, token}) {
         <Button
           onClick={handleSubmit}
           variant="contained"
-          disabled={
-            !form.name ||
-            !form.email ||
-            !form.phone ||
-            !form.position ||
-            !form.experience ||
-            !form.resume ||
-            !form.agreed
-          }
+          disabled={submitting}
+          startIcon={submitting && <CircularProgress color="inherit" size={20} />}
         >
-          Save
+           {submitting ? 'Saving……' : 'Save'}
         </Button>
       </DialogActions>
     </Dialog>
