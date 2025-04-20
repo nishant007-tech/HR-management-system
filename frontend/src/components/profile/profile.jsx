@@ -54,56 +54,6 @@ function Profile({ token }) {
         fetchUserData();
     }, [params?.id,token])
 
-    const Validate = () => {
-        let formValidated = true;
-        if (state?.name?.length < 5) {
-            seterrorMsg("Name atleast have 5 letters!")
-            setShowError(true);
-            formValidated = false;
-        }
-        else if (!new RegExp(/^[a-zA-Z0-9 ]*$/).test(state?.name)) {
-            seterrorMsg("Name should not contain special characters")
-            setShowError(true);
-            formValidated = false;
-        }
-        return formValidated;
-    }
-
-    const changeHandler = (e) => {
-        setState({
-            ...state,
-            [e.target.name]: e.target.value,
-        })
-    }
-    const submitHandler = async (e) => {
-        e.preventDefault()
-        try {
-            let isValidated = Validate();
-            if (isValidated) {
-                let resData = await axios.patch(`${API_URL}/users/${params.id}`, state, {
-                    headers: {
-                        authorization: token
-                    }
-                });
-                if (resData?.data) {
-                    setState({
-                        name: resData?.data?.name,
-                        email: resData?.data?.email,
-                        status: resData?.data?.status,
-                        role: resData?.data?.role,
-                    })
-                    NotificationManager.success(" Profile Updated Successfully.", "Success", 5000)
-                    setTimeout(() => {
-                        window.location.reload()
-                    }, 1000);
-                }
-            }
-        } catch (error) {
-            NotificationManager.error(" Some Error Occured!", "Error", 5000)
-            throw Error(error);
-
-        }
-    }
 
     return (
         <div className='editContainer formContainer'>
@@ -126,13 +76,13 @@ function Profile({ token }) {
                         </MuiAlert>
                     </Snackbar >
                 }
-                <p id='heading'> Admin Profile </p>
+                <p id='heading'> User Profile </p>
                 <TextField
                     required={true}
                     type="text"
                     className='txtField'
                     value={state?.name}
-                    onChange={changeHandler}
+                    disabled={true}
                     label="Name"
                     name='name'
                     variant="outlined"
@@ -142,7 +92,6 @@ function Profile({ token }) {
                     type="email"
                     className='txtField'
                     value={state?.email}
-                    onChange={changeHandler}
                     label="Email"
                     disabled={true}
                     name='email'
@@ -153,7 +102,6 @@ function Profile({ token }) {
                     type="text"
                     className='txtField'
                     disabled={true}
-                    onChange={changeHandler}
                     value={state?.status}
                     label="Status"
                     name='status'
@@ -165,28 +113,6 @@ function Profile({ token }) {
                         InActive
                     </MenuItem>
                 </TextField>
-                <TextField
-                    select
-                    required={true}
-                    type="text"
-                    className='txtField'
-                    onChange={changeHandler}
-                    value={state?.role}
-                    disabled={true}
-                    label="Role"
-                    name='role'
-                    variant="outlined" >
-                    <MenuItem key="superAdmin" value="superAdmin" >
-                        SuperAdmin
-                    </MenuItem>
-                    <MenuItem key="admin" value="admin" >
-                        Admin
-                    </MenuItem>
-                    <MenuItem key="user" value="user">
-                        User
-                    </MenuItem>
-                </TextField>
-                <Button type='submit' onClick={submitHandler} variant="contained">Save</Button>
             </form>
         </div>
     )

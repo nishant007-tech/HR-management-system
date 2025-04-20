@@ -1,0 +1,65 @@
+
+.registerCard {
+  display: flex;
+  width: 900px;
+  max-width: 90%;
+  height: 500px;
+  border-radius: 16px;
+  background: white;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.registerLeft {
+  flex: 1;
+  background-color: #1976d2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+}
+
+.registerLeft img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.registerRight {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.registerRight form {
+  width: 100%;
+}
+
+#registerHeading {
+  font-size: 28px;
+  font-weight: 300;
+  margin-bottom: 24px;
+  color: #1976d2;
+  text-align: left;
+}
+
+.registerBtn {
+  margin-top: 8px;
+  align-self: flex-start;
+}
+
+.registerLink {
+  margin-top: 16px;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.6);
+  width: 100%;
+  text-align: left;
+}
+
+.registerLink a {
+  color: #1976d2;
+  text-decoration: none;
+  margin-left: 4px;
+}

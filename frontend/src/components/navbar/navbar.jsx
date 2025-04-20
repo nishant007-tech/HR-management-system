@@ -16,30 +16,31 @@ function Navbar({ userData }) {
     return (
         <>
             {
-                userData?.email ?
+                // userData?.email ?
+                //     <div className="navbar">
+                //         <p id="name">
+                //             <Avatar style={{ marginRight: "5px" }} sx={{ bgcolor: blue[100], color: blue[600] }}>
+                //                 <PersonOutlineTwoToneIcon />
+                //             </Avatar>
+                //             <Link to="/dashboard">
+                //                 Welcome {userData?.role}, {userData?.name}
+                //             </Link>
+                //         </p>
+                //         <p>
+                //             <Link to={`/profile/${userData?._id}`}>
+                //                 <Button style={{ "marginRight": "10px" }} variant="outlined" startIcon={<ManageAccountsTwoToneIcon />}>
+                //                     Profile
+                //                 </Button>
+                //             </Link>
+                //             <Button onClick={logoutHandler} variant="outlined" color="info" startIcon={<LogoutTwoToneIcon />}>
+                //                 Logout
+                //             </Button>
+                //         </p>
+                //     </div>
+                    // :
+                    !userData?.email &&
                     <div className="navbar">
-                        <p id="name">
-                            <Avatar style={{ marginRight: "5px" }} sx={{ bgcolor: blue[100], color: blue[600] }}>
-                                <PersonOutlineTwoToneIcon />
-                            </Avatar>
-                            <Link to="/dashboard">
-                                Welcome {userData?.role}, {userData?.name}
-                            </Link>
-                        </p>
-                        <p>
-                            <Link to={`/profile/${userData?._id}`}>
-                                <Button style={{ "marginRight": "10px" }} variant="outlined" startIcon={<ManageAccountsTwoToneIcon />}>
-                                    Profile
-                                </Button>
-                            </Link>
-                            <Button onClick={logoutHandler} variant="outlined" color="info" startIcon={<LogoutTwoToneIcon />}>
-                                Logout
-                            </Button>
-                        </p>
-                    </div>
-                    :
-                    <div className="navbar">
-                        <p id="name2"><ManageAccountsTwoToneIcon /> User Management System</p>
+                        <p id="name2"><ManageAccountsTwoToneIcon /> HR Management System</p>
                     </div>
             }
         </>

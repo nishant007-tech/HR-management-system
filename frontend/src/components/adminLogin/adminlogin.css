@@ -1,19 +1,75 @@
+/* adminlogin.css */
+
 .adminContainer {
-  height: 100vh;
-}
-.adminContainer form {
   display: flex;
   justify-content: center;
+  margin-top: 4%;
+  width: 100%;
+}
+
+.loginCard {
+  display: flex;
+  width: 900px;          
+  height: 500px;          
+  max-width: 90%;
+  background: white;
+  border-radius: 16px;        
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); 
+  overflow: hidden;          
+}
+
+.loginLeft {
+  flex: 1;
+  background-color: #1976d2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+}
+
+.loginLeft img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* Right form panel */
+.loginRight {
+  flex: 1;
+  padding: 40px;
+  display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 5%;
 }
-.adminContainer form .txtField {
-  width: 350px;
-  margin: 10px 0;
+
+.loginRight form {
+  width: 100%;
 }
+
 #heading {
-  font-size: 39px;
+  font-size: 28px;
   font-weight: 300;
-  margin: 0px 0px 20px 0;
+  margin-bottom: 24px;
+  color: #1976d2;    
+}
+
+.txtField {
+  width: 100%;
+  margin-bottom: 16px !important;
+}
+
+.loginBtn {
+  margin-top: 8px;
+}
+
+.loginLink {
+  margin-top: 16px;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.loginLink a {
+  color: #1976d2;
+  text-decoration: none;
+  margin-left: 4px;
 }

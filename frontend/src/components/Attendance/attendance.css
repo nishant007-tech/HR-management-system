@@ -1,0 +1,89 @@
+/* root flex container */
+.dashboardRoot {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* sidebar fixed 280px wide */
+.sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  background: #fff;
+  border-right: 1px solid rgba(0,0,0,0.1);
+  top: 0;
+  left: 0;
+  bottom: 0;
+  overflow-y: auto;
+}
+
+/* main content sits to the right of the sidebar */
+.mainContent {
+  margin-left: 30px;
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  background: #f5faff;
+}
+
+/* toolbar row */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.searchBox {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* table card */
+.tableWrapper {
+  background: #fff;
+  border: 2px solid #1976d2;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  overflow-x: auto;
+}
+
+.tableWrapper table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tableWrapper thead tr {
+  background: #1976d2;
+  color: #fff;
+}
+
+.tableWrapper th,
+.tableWrapper td {
+  padding: 12px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.tableWrapper tbody tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+.tableWrapper tbody tr:hover {
+  background: #eef4ff;
+}
+
+/* pagination */
+.paginationWrapper {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-end;
+}
+#positionClass{
+  width: 50px !important;
+}

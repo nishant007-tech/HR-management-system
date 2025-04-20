@@ -2,7 +2,7 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { NotificationContainer } from 'react-notifications';
 import Adminlogin from './components/adminLogin/adminlogin';
-import Dashboard from './components/dashboard/dashboard';
+import Dashboard from './components/Candidate/candidate';
 import PrivateRoute from './components/privateRoute';
 import Navbar from './components/navbar/navbar';
 import { useEffect, useState } from 'react';
@@ -12,6 +12,12 @@ import Addnewuser from './components/addnewUser/addnewuser';
 import Viewuser from './components/viewUser/viewuser';
 import Edituser from './components/editUser/edituser';
 import Profile from './components/profile/profile';
+import AdminRegister from './components/adminRegister/adminRegister';
+import Candidate from './components/Candidate/candidate';
+import Employee from './components/Employee/employee';
+import Attendance from './components/Attendance/attendance';
+import Leaves from './components/Leaves/leaves';
+import Logout from './components/logout/logout';
 function App() {
   const [userData, setuserData] = useState()
   let userId = localStorage.getItem("userId");
@@ -40,7 +46,12 @@ function App() {
       <Navbar userData={userData} />
       <Routes>
         <Route exact path='/' element={<PrivateRoute path="/" component={<Adminlogin />} />} />
-        <Route exact path="/dashboard" element={<PrivateRoute path="/dashboard" component={<Dashboard token={token} userData={userData} />} />} />
+        <Route exact path='/register' element={<PrivateRoute path="/register" component={<AdminRegister />} />} />
+        <Route exact path="/candidates" element={<PrivateRoute path="/candidates" component={<Candidate token={token} userData={userData} />} />} />
+        <Route exact path="/employees" element={<PrivateRoute path="/employees" component={<Employee token={token} userData={userData} />} />} />
+        <Route exact path="/attendance" element={<PrivateRoute path="/employees" component={<Attendance token={token} userData={userData} />} />} />
+        <Route exact path="/leaves" element={<PrivateRoute path="/employees" component={<Leaves token={token} userData={userData} />} />} />
+        <Route exact path="/logout" element={<PrivateRoute path="/employees" component={<Logout/>} />} />
         <Route exact path="/add_new_user" element={<PrivateRoute path="/add_new_user" component={<Addnewuser token={token} userData={userData} />} />} />
         <Route exact path="/view_user/:id" element={<PrivateRoute path="/view_user/:id" component={<Viewuser token={token} userData={userData} />} />} />
         <Route exact path="/edit_user/:id" element={<PrivateRoute path="/edit_user/:id" component={<Edituser token={token} userData={userData} />} />} />

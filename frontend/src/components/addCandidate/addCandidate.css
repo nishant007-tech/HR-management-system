@@ -1,0 +1,61 @@
+/* addCandidate.css */
+.addCandidateDialog {
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  
+  .dialogHeader {
+    background-color: #1976d2;
+    color: white;
+    position: relative;
+    padding: 16px 24px;
+  }
+  
+  .closeBtn {
+    position: absolute;
+    right: 16px;
+    top: 16px;
+    color: white;
+  }
+  
+  .candidateForm .MuiOutlinedInput-root {
+    border-radius: 24px;
+  }
+  
+  .candidateForm .MuiOutlinedInput-notchedOutline {
+    border-color: #1976d2;
+  }
+  
+  .resumeUpload {
+    position: relative;
+  }
+  
+  .uploadLabel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border: 2px dashed #1976d2;
+    border-radius: 24px;
+    color: #1976d2;
+    cursor: pointer;
+  }
+  
+  .uploadIcon {
+    margin-left: 8px;
+  }
+  
+  .resumeUpload input {
+    display: none;
+  }
+  
+  .dialogFooter {
+    padding: 16px 24px;
+    background-color: #fafafa;
+  }
+  
+  .resumeUpload .fileName {
+    margin-top: 8px;
+    font-size: 0.875rem;
+    color: #333;
+  }

@@ -1,7 +1,8 @@
 const userModel = require("../models/userModel");
 const client = require("../redis/setupRedis");
-const ProduceMsg = require("../rabbitmq/producer");
 const bcrypt = require("bcrypt");
+const path    = require("path");
+const candidateModel = require("../models/candidateModel");
 
 const createUser = async (req, res) => {
     let emailExist = await userModel.findOne({ email: req.body.email });
@@ -51,6 +52,7 @@ const updateUserById = async (req, res) => {
         res.status(400).send({message:"Something went wrong!"})
     }
 }
+
 const deleteUserById = async (req, res) => {
     try {
         await userModel.deleteOne({ _id: req.params.id });
@@ -59,13 +61,14 @@ const deleteUserById = async (req, res) => {
         res.status(400).send(error)
     }
 }
-const fetchQueryResults = async (query, limit, skipIndex) => {
-    return await userModel.find(query, { password: 0 })
-        .sort({ _id: 1 })
-        .skip(skipIndex)
-        .limit(limit)
-        .lean()
-        .exec();
+
+const deleteCandidateById = async (req, res) => {
+    try {
+        await candidateModel.deleteOne({ _id: req.params.id });
+        res.status(200).json({ message: "User Deleted!" });
+    } catch (error) {
+        res.status(400).send(error)
+    }
 }
 
 const searchUsers = async (req, res) => {
@@ -113,17 +116,178 @@ const getUsers = async (req, res) => {
         const skipIndex = (page - 1) * limit;
         let query = {};
         let count = await userModel.find({}, { password: 0 }).countDocuments();
-        let results = await fetchQueryResults(query, limit, skipIndex);
+        let results =  await userModel.find(query, { password: 0 })
+        .sort({ _id: 1 })
+        .skip(skipIndex)
+        .limit(limit)
+        .lean()
+        .exec();
         res.status(200).json({ results: results, count: count });
     } catch (e) {
         res.status(500).json({ message: "Error Occured" });
     }
 };
+
+const getCandidates = async (req, res) => {
+    try {
+        const { 
+            page = 1,
+            limit = 6,
+            status,
+            position,
+            search,
+            startDate,
+            endDate
+        } = req.query;
+        console.log("status",status);
+        console.log("position",position);
+        
+        const filter = {};
+      if (status)   filter.status   = status;
+      if (position) filter.position = position;
+      if (search)   filter.name     = new RegExp(search, 'i');
+      if (startDate || endDate) {
+        filter.createdAt = {};
+        if (startDate) filter.createdAt.$gte = new Date(startDate);
+        if (endDate)   filter.createdAt.$lte = new Date(endDate);
+      }
+      const skip = (page - 1) * limit;
+      const [ results, count ] = await Promise.all([
+        candidateModel
+          .find(filter)
+          .sort({ createdAt: -1 })
+          .skip(skip)
+          .limit(Number(limit)),
+        candidateModel.countDocuments(filter)
+      ]);
+      console.log("results",results);
+      
+      return res.json({ results, count });
+    } catch (e) {
+        res.status(500).json({ message: "Error Occured" });
+    }
+};
+
+const addCandidate = async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: "Resume PDF is required" });
+      }
+  
+      const { name, email, phone, position, experience, status } = req.body;
+  
+      if (!name || !email || !phone) {
+        return res.status(400).json({ message: "Name, email & phone are required" });
+      }
+  
+      // prevent duplicate email
+      const exists = await candidateModel.findOne({ email });
+      if (exists) {
+        return res.status(400).json({ message: "Email already in use" });
+      }
+  
+      // create the candidate record
+      const candidate = new candidateModel({
+        name,
+        email,
+        phone,
+        position,
+        experience: experience || 0,
+        status:     status || "new",
+        resumeUrl:  req.file.path    // store the local path, e.g. "uploads/resumes/resume-123456.pdf"
+      });
+  
+      await candidate.save();
+  
+      res.status(201).json({
+        candidate,
+        message: "Candidate added successfully"
+      });
+  
+    } catch (err) {
+      console.error("Add candidate error:", err);
+      res.status(500).json({ message: "Server error" });
+    }
+  };
+
+
+const downloadResume = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const candidate = await candidateModel.findById(id).select("resumeUrl");
+
+      console.log("candidate.resumeUrl",candidate.resumeUrl);
+      
+      if (!candidate || !candidate.resumeUrl) {
+        return res.status(404).json({ message: "Resume not found" });
+      }
+  
+      // resolve the absolute path
+      const filePath = path.resolve(candidate.resumeUrl);
+  
+      // send the file for download
+      return res.download(filePath, err => {
+        if (err) {
+          console.error("Download error:", err);
+          return res.status(500).json({ message: "Could not download file" });
+        }
+      });
+    } catch (err) {
+      console.error("DownloadResume error:", err);
+      return res.status(500).json({ message: "Server error" });
+    }
+  };
+  
+  
+  const updateStatus = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { status } = req.body;
+      const allowed = ['new','scheduled','ongoing','selected','rejected'];
+      if (!allowed.includes(status)) {
+        return res.status(400).json({ message: 'Invalid status' });
+      }
+      const updated = await candidateModel.findByIdAndUpdate(
+        id,
+        { status },
+        { new: true }
+      );
+      if (!updated) {
+        return res.status(404).json({ message: 'Candidate not found' });
+      }
+      res.json({ message: 'Status updated', candidate: updated });
+    } catch (err) {
+      console.error('updateStatus error', err);
+      res.status(500).json({ message: 'Server error' });
+    }
+  };
+
+  const getCandidatesMetaData = async (req, res) => {
+    try {
+      const positions = await candidateModel.distinct('position');
+      const statuses  = await candidateModel.distinct('status');
+        console.log("positions",positions);
+        console.log("statuses",statuses);
+        
+      return res.json({ positions, statuses });
+    } catch (err) {
+      console.error('getMeta error', err);
+      return res.status(500).json({ message: 'Server error' });
+    }
+  };
+
+
 module.exports = {
     getUserById,
+    getCandidatesMetaData,
+    updateStatus,
     updateUserById,
+    downloadResume,
     deleteUserById,
+    deleteCandidateById,
     searchUsers,
     createUser,
-    getUsers
+    getUsers,
+    getCandidates,
+    addCandidate,
 }
