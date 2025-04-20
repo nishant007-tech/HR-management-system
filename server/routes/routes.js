@@ -8,7 +8,7 @@ const multer  = require("multer");
 const path    = require("path");
 
 // configure multer to save PDFs into /uploads/resumes
-const storage = multer.diskStorage({
+const storage = multer.memoryStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/resumes/");
   },
