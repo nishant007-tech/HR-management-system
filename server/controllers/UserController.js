@@ -1,5 +1,4 @@
 const userModel = require("../models/userModel");
-const client = require("../redis/setupRedis");
 const bcrypt = require("bcrypt");
 const path    = require("path");
 const candidateModel = require("../models/candidateModel");
