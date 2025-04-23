@@ -6,11 +6,11 @@ It's User Management System.
 
 - [User-management](#user-management)
   - [Table of Contents](#table-of-contents)
-  - [Features](#features)
+  - [Features :000](#features-000)
   - [Installation](#installation)
     - [Local DB changes](#local-db-changes)
 
-## Features
+## Features :000
 
 - User(admin) can register.
 - We can add candidate profiles and update their status according to the HR process.
